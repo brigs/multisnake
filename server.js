@@ -13,10 +13,14 @@ httpServer.listen(8080);
 
 io.sockets.on('connection', function(socket) {
 	players[socket.id] = {};
+
 	socket.emit('players', players);
 
+	socket.emit('player', socket.id);
+
 	socket.on('update', function(player) {
-		io.sockets.emit('update', player);
+		players[player.id] = player;
+		io.sockets.emit('updatePlayers', players);
 	});
 
 	socket.on('disconnect', function() {

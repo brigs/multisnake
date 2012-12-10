@@ -33,6 +33,7 @@ var SNAKE = (function(s, GRAPHICS) {
 		west:[1,0]
 	}
 	s.currentHeading = {};
+	s.id = 0;
 	var gamePaused = true;
 	var snakeIsUpdating = false;
 	
@@ -51,9 +52,13 @@ var SNAKE = (function(s, GRAPHICS) {
 		this.posY = posY;
 		this.food = true;
 	}
+
+	var Socket = {};
 	
 	//Init game
-	s.init = function() {
+	s.init = function(socket, id) {
+		Socket = socket;
+		console.log(id);
 		s.currentHeading = s.headings.north;
 		createGameBoard(GAMEBOARD_XSIZE, GAMEBOARD_YSIZE);
 		createSnake(INIT_SNAKE_LENGTH);
@@ -61,7 +66,8 @@ var SNAKE = (function(s, GRAPHICS) {
 		initKeyboard();
 		gameScore = 0;
 		lastEatTime = new Date();
-		updateGameScore();
+		updateGameScore();	
+		s.id = id;
 		console.log("SNAKE init done");
 	}
 	
@@ -141,6 +147,15 @@ var SNAKE = (function(s, GRAPHICS) {
 			ySize: GAMEBOARD_YSIZE
 		}
 	}
+
+	function updatePositionOnServer() {
+		Socket.emit('update', {
+			currentHeading: s.currentHeading, 
+			snake: s.snake,
+			id : s.id
+		});
+	}
+
 	
 	function initKeyboard() {
 		//Keyboard handling
@@ -151,24 +166,25 @@ var SNAKE = (function(s, GRAPHICS) {
 					if(!gamePaused && s.currentHeading !== s.headings.south && !snakeIsUpdating) {
 						s.currentHeading = s.headings.north;
 						// PUSH STATE TO SERVER
+						updatePositionOnServer();
 					}
 					break;
 				case KEYCODE_DOWN:
 					if(!gamePaused && s.currentHeading !== s.headings.north && !snakeIsUpdating) { 
 						s.currentHeading = s.headings.south;
-						// PUSH STATE TO SERVER
+						updatePositionOnServer();
 					}
 					break;
 				case KEYCODE_LEFT:
 					if(!gamePaused && s.currentHeading !== s.headings.west && !snakeIsUpdating) { 
 						s.currentHeading = s.headings.east;
-						// PUSH STATE TO SERVER
+						updatePositionOnServer();
 					}
 					break;	
 				case KEYCODE_RIGHT:
 					if(!gamePaused && s.currentHeading !== s.headings.east && !snakeIsUpdating) { 
 						s.currentHeading = s.headings.west;
-						// PUSH STATE TO SERVER
+						updatePositionOnServer();
 					}
 					break;
 				case KEYCODE_R:
