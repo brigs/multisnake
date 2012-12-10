@@ -2,8 +2,7 @@ var SNAKE = (function(s, GRAPHICS) {
 	//Public object
 	var s = {};
 	s.version = "0.1";
-	s.snakes = [];
-	s.snake = {};
+	
 	//Private game vars
 	var GAMEBOARD_XSIZE = 50;
 	var GAMEBOARD_YSIZE = 50;
@@ -54,19 +53,12 @@ var SNAKE = (function(s, GRAPHICS) {
 	}
 	
 	//Init game
-	s.init = function(players) {
+	s.init = function(player) {
 		s.currentHeading = s.headings.north;
 		createGameBoard(GAMEBOARD_XSIZE, GAMEBOARD_YSIZE);
-		console.log(players);
-
-		for (var key in players) {
-			var player = (players[key]);
-			createSnake(INIT_SNAKE_LENGTH, player.posX, player.posY, player.direction);
-		}
-
-        
-
-		//createSnake(INIT_SNAKE_LENGTH);
+	
+		console.log(player.posX);
+		createSnake(INIT_SNAKE_LENGTH, player.posX, player.posY, player.direction);
 		initFoods(START_FOOD);
 		initKeyboard();
 		gameScore = 0;
@@ -83,20 +75,21 @@ var SNAKE = (function(s, GRAPHICS) {
 	}
 	
 	function createSnake(length, posX, posY, direction) {
-				
-		var snake = [];
+		s.snake = [];
+		console.log(direction);
+		
 		for (i=0; i < length; i++) {
 			var x = (posX)+(i*direction[0]);
 			var y = (posY)+(i*direction[1]);
 			
 			newSnakePart = new snakePart(x, y);
 
-			snake.push(newSnakePart);
+			s.snake.push(newSnakePart);
 			
 			gameBoard[newSnakePart.posX][newSnakePart.posY] = newSnakePart;
 			console.log("snakePart created @" + newSnakePart.posX + "," + newSnakePart.posY);
 		}
-		s.snakes.push(snake);
+		
 	}
 	
 	s.addFood = function(posX,posY) {
