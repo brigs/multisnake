@@ -10,10 +10,15 @@ var GRAPHICS = (function (g) {
 			g.clearAll();
 			//Initial drawup
 			
-			//Draw snake
-			for (i=0; i < SNAKE.snake.length; ++i) {
-				g.drawBox(SNAKE.snake[i].posX,SNAKE.snake[i].posY, "black");
-			}
+			for (i=0; i < SNAKE.snakes.length; ++i){
+				console.log(SNAKE.snakes);
+				var snake = SNAKE.snakes[i];
+
+				for (j=0; j < snake.length; ++j) {
+					g.drawBox(snake[j].posX,snake[j].posY, "black");
+				}	
+			}//Draw snake
+			
 			
 			//Draw food
 			for (i=0; i < SNAKE.food.length; ++i) {

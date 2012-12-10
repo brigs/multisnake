@@ -1,5 +1,20 @@
 $(document).ready(function() {
-	SNAKE.init();
+	SNAKE.init({
+		foo: {
+			length : 3,
+			posX : 10,
+			posY : 20,
+			direction : [0, 1]
+		},
+		foagfgo: {
+			length : 3,
+			posX : 20,
+			posY : 30,
+			direction : [0, 1]
+		}
+	});
+	
+
 	if(GRAPHICS.init()) {
 		console.log("GRAPHICS init ok! yay!");
 	}
